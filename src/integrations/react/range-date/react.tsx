@@ -2,19 +2,21 @@
 import React, { useState } from "react";
 import { Calendar } from "react-modern-calendar-datepicker";
 
-const RangeDatePicker = (props: {defaultFrom: any, defaultTo: any}) => {
+const RangeDatePicker = (props: {defaultRange: any, setRange: any}) => {
   
+  const changeValue = (value: any) => {
+    console.log('change', value);
+    // To set value in component to view in app
+    setSelectedDayRange(value);
+    // update qwik route component principal info
+    props.setRange(value);
+  }
 
-  const defaultRange = {
-    from: props.defaultFrom,
-    to: props.defaultTo,
-  };
-
-  const [selectedDayRange, setSelectedDayRange] = useState(defaultRange);
+  const [selectedDayRange, setSelectedDayRange] = useState(props.defaultRange);
   return (
     <Calendar
       value={selectedDayRange}
-      onChange={(value) => setSelectedDayRange(value)}
+      onChange={(value) => changeValue(value)}
       shouldHighlightWeekends
     />
   );
