@@ -1,10 +1,14 @@
 /** @jsxImportSource react */
 import React, { useState } from "react";
 import { Calendar } from "react-modern-calendar-datepicker";
+import {RangeDateProps } from '~/models/datepicker';
 
-const RangeDatePicker = (props: {defaultRange: any, setRange: any}) => {
+const RangeDatePicker = (props: {defaultRange: RangeDateProps, setRange: any}) => {
   
-  const changeValue = (value: any) => {
+  const changeValue = (value: {
+    from: {year: number, month: number, day: number},
+    to: {year: number, month: number, day: number}
+  }) => {
     console.log('change', value);
     // To set value in component to view in app
     setSelectedDayRange(value);
@@ -16,7 +20,10 @@ const RangeDatePicker = (props: {defaultRange: any, setRange: any}) => {
   return (
     <Calendar
       value={selectedDayRange}
-      onChange={(value) => changeValue(value)}
+      onChange={(value: {
+        from: {year: number, month: number, day: number},
+        to: {year: number, month: number, day: number}
+      }) => changeValue(value)}
       shouldHighlightWeekends
     />
   );

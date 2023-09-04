@@ -1,14 +1,15 @@
-import { component$, useSignal, useStyles$, $ } from "@builder.io/qwik";
-import type { DocumentHead } from "@builder.io/qwik-city";
+import { component$, useSignal, useStyles$, $ } from '@builder.io/qwik';
+import type { DocumentHead } from '@builder.io/qwik-city';
 
 // el componente de NPM ya convertido en Qwik
-import { QDayPickerReact } from "~/integrations/react/date-picker";
+import { QDayPickerReact } from '~/integrations/react/date-picker';
 
 // Estilos del componente que acabamos de incluir en el proyecto
-import dayPickerStyles from "./../../node_modules/react-day-picker/dist/style.css?inline";
-import reactModerDatePickerStyles from "./../../node_modules/react-modern-calendar-datepicker/lib/DatePicker.css?inline";
+import dayPickerStyles from './../../node_modules/react-day-picker/dist/style.css?inline';
+import reactModerDatePickerStyles from './../../node_modules/react-modern-calendar-datepicker/lib/DatePicker.css?inline';
 
-import { QRangeDatePicker } from "~/integrations/react/range-date";
+import { QRangeDatePicker } from '~/integrations/react/range-date';
+import { RangeDateProps } from '~/models/datepicker';
 
 // Combinamos los estilos y el componente de Qwik
 export const DayPickerQwik = component$(() => {
@@ -30,46 +31,59 @@ export default component$(() => {
     day: 7,
   };
 
-  const defaultRange = useSignal({
+  const defaultRange = useSignal<RangeDateProps>({
     from: defaultFrom,
     to: defaultTo,
   });
 
   // Function to pass in React child component to update select range value
   const setRange = $((value: any) => {
-    console.log('router/index.tsx', value)
-    defaultRange.value = value;
+    console.log('router/index.tsx', value);
+    defaultRange.value = {
+      from: value.from,
+      to: value.to || null,
+    };
   });
 
-
-
   return (
-    <div class="section">
-      <div class="container center">
+    <div class='section'>
+      <div class='container center'>
         <h2>Trabajando con un paquete NPM - React Day Picker</h2>
         <DayPickerQwik />
-        <br/>
+        <br />
         <h3>Rango de fechas</h3>
-        <p>Desde:  {defaultRange.value.from.year} / {defaultRange.value.from.month} / {defaultRange.value.from.day}</p>
-        <p>Hasta: {defaultRange.value.to.year} / {defaultRange.value.to.month} / {defaultRange.value.to.day}</p>
-        <QRangeDatePicker defaultRange={defaultRange.value} setRange={setRange}/>
+        <p>
+          Desde: {defaultRange.value.from.year} /{' '}
+          {defaultRange.value.from.month} / {defaultRange.value.from.day}
+        </p>
+        {defaultRange.value.to === null ? (
+          <p>Hasta: Esperando...</p>
+        ) : (
+          <p>
+            Hasta: {defaultRange.value.to.year} / {defaultRange.value.to.month}{' '}
+            / {defaultRange.value.to.day}
+          </p>
+        )}
+        <QRangeDatePicker
+          defaultRange={defaultRange.value}
+          setRange={setRange}
+        />
       </div>
     </div>
   );
 });
 
 export const head: DocumentHead = {
-  title: "Welcome to Qwik",
+  title: 'Welcome to Qwik',
   meta: [
     {
-      name: "description",
-      content: "Qwik site description",
+      name: 'description',
+      content: 'Qwik site description',
     },
   ],
 };
-  /*useStyles$(`
+/*useStyles$(`
     button.rdp-button_reset.rdp-button.rdp-day {
         background: #382f79;
     }
   `);*/
- 
